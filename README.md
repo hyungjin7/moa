@@ -66,3 +66,12 @@ MDX report components in `components/report/`. See [the verification guide](docs
 for feature coverage and instructions to reproduce the English screenshots.
 
 [MIT](LICENSE)
+
+## Delvrio deployment and optional Keycloak SSO
+
+Native team/owner login remains available alongside a `Keycloak 로그인` button.
+The deployed host is `https://moa.delvrio.com` (Kubernetes namespace `moa`).
+Accounts are linked only after explicit administrator approval; matching emails never auto-link.
+See [the deployment and SSO runbook](docs/2026-11-08_MOA_Keycloak_SSO_설계및운영절차.md),
+[Kubernetes manifests](infra/k8s/), and [Keycloak client import](infra/keycloak/moa-web.json).
+Run the isolated protocol/security tests with `npm run test:oidc`.

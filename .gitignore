@@ -23,3 +23,8 @@ public/*
 artifacts/
 test-results/
 playwright-report/
+
+# Server-side OIDC identities, pending approvals and encrypted session material
+oidc.json
+oidc.json.*.tmp
+.private/

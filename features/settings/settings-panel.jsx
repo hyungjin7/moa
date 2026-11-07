@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Button, Dialog, EmptyState, Icon, InlineAlert, Input, StatusBadge } from '../../components/ui/index.jsx'
 import { copyText } from '../../lib/client-store.js'
 import styles from './settings.module.css'
+import OidcApprovals from './oidc-approvals.jsx'
 
 export async function requestJSON(url, body) {
   const r = await fetch(url, body === undefined ? {} : { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
@@ -113,6 +114,7 @@ function Members({ index }) {
     </section>
     {data.invites.length > 0 && <section className={styles.section}><div className={styles.sectionHeading}><h3>Pending invitations <span>{data.invites.length}</span></h3></div><div className={styles.list}>{data.invites.map((i) => <div className={styles.row} key={i.token}><div className={styles.rowText}><strong>{i.role === 'admin' ? 'Invite admin' : names(i.projects)}</strong><span>Expires {new Date(i.exp).toLocaleDateString('en-US')} · Single use</span></div><div className={styles.rowActions}><Button variant="secondary" size="sm" onClick={async () => setMessage({ text: (await copyText(`${location.origin}/join/${i.token}`)) ? 'Invitation link copied.' : 'Copy the displayed URL manually.' })}>Copy link</Button><Button variant="ghost" size="sm" disabled={busy} onClick={() => run(() => requestJSON('/api/users/invite', { remove: i.token }), 'Invitation revoked.')}>Revoke</Button></div></div>)}</div></section>}
     {/* Only a hash of each reset link is kept, so there is no Copy link here — Reset password makes a new one. */}
+    <OidcApprovals users={data.users} />
     {resets.length > 0 && <section className={styles.section}><div className={styles.sectionHeading}><div><h3>Pending password resets <span>{resets.length}</span></h3><p>The current password keeps working until the link is used.</p></div></div><div className={styles.list}>{resets.map((r) => { const u = data.users.find((user) => user.id === r.userId); return <div className={styles.row} key={r.userId}><div className={styles.rowText}><strong>{u?.name || r.userId}</strong><span>{u?.email ? `${u.email} · ` : ''}Expires {new Date(r.exp).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })} · Single use</span></div><div className={styles.rowActions}><Button variant="ghost" size="sm" disabled={busy} onClick={() => run(() => requestJSON('/api/users/reset', { id: r.userId, remove: true }), 'Reset link revoked.')}>Revoke</Button></div></div> })}</div></section>}
   </div>
 }

@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: moa-data
+  namespace: moa
+spec:
+  accessModes: [ReadWriteOnce]
+  storageClassName: nfs-hdd
+  resources:
+    requests:
+      storage: 10Gi

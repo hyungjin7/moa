@@ -1,0 +1,21 @@
+{
+  "clientId": "moa-web",
+  "name": "MOA",
+  "enabled": true,
+  "protocol": "openid-connect",
+  "publicClient": false,
+  "clientAuthenticatorType": "client-secret",
+  "standardFlowEnabled": true,
+  "implicitFlowEnabled": false,
+  "directAccessGrantsEnabled": false,
+  "serviceAccountsEnabled": false,
+  "rootUrl": "https://moa.delvrio.com",
+  "baseUrl": "https://moa.delvrio.com",
+  "redirectUris": ["https://moa.delvrio.com/api/oidc/callback"],
+  "webOrigins": ["https://moa.delvrio.com"],
+  "defaultClientScopes": ["profile", "email"],
+  "attributes": {
+    "pkce.code.challenge.method": "S256",
+    "post.logout.redirect.uris": "https://moa.delvrio.com/login"
+  }
+}

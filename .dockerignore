@@ -1,0 +1,17 @@
+.git
+.next
+node_modules
+.env*
+!.env.example
+users.json
+shares.json
+pins.json
+registry.json
+registry.json.bak*
+oidc.json
+oidc.json.*.tmp
+.review
+artifacts
+test-results
+playwright-report
+*.log

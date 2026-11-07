@@ -11,8 +11,10 @@ export default function LoginForm() {
   const [password, setPassword] = useState('')
   const [message, setMessage] = useState(null)
   const [busy, setBusy] = useState(false)
+  const [sso, setSso] = useState(false)
 
   useEffect(() => {
+    fetch('/api/oidc/config').then(r => r.json()).then(d => setSso(d.enabled === true)).catch(() => {})
     const notice = new URLSearchParams(window.location.search).get('msg')
     if (notice) setMessage(notice)
   }, [])
@@ -73,6 +75,10 @@ export default function LoginForm() {
         </Field>
         {message && <InlineAlert tone="danger">{message}</InlineAlert>}
         <Button type="submit" variant="primary" loading={busy} disabled={!password || (mode === 'team' && !email.trim())} className={styles.submit}>Log in<Icon name="arrow-right" size={18} /></Button>
+        {sso && <Button type="button" variant="secondary" disabled={busy} onClick={() => {
+          const next = new URLSearchParams(window.location.search).get('next') || '/'
+          window.location.assign('/api/oidc/login?next=' + encodeURIComponent(next))
+        }}>Keycloak 로그인</Button>}
         <p className={styles.help}>Open shared documents directly from their links.<br />Need a team account? Ask an admin for an invitation.</p>
       </form>
     </AuthLayout>

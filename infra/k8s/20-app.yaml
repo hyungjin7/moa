@@ -1,0 +1,114 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: moa
+  namespace: moa
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: moa
+  template:
+    metadata:
+      labels:
+        app: moa
+    spec:
+      imagePullSecrets:
+        - name: gitea-registry-auth
+      securityContext:
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+      initContainers:
+        - name: initialize-content
+          image: gitea.delvrio.com/hyungjin7/moa/app@sha256:80b5b772fa469edb8e25e83674ba12bbd1ab48bd55c4046e3fd4c2bbba290aa9
+          command: [node, scripts/initialize-content.mjs]
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: [ALL]
+          volumeMounts:
+            - name: data
+              mountPath: /data
+          env:
+            - name: MOA_CONTENT_ROOT
+              value: /data
+      containers:
+        - name: app
+          image: gitea.delvrio.com/hyungjin7/moa/app@sha256:80b5b772fa469edb8e25e83674ba12bbd1ab48bd55c4046e3fd4c2bbba290aa9
+          ports:
+            - name: http
+              containerPort: 5001
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: [ALL]
+          envFrom:
+            - secretRef:
+                name: moa-auth
+          env:
+            - name: MOA_CONTENT_ROOT
+              value: /data
+            - name: MOA_BROWSE_ROOT
+              value: /data/projects
+            - name: MOA_PUBLIC_ORIGIN
+              value: https://moa.delvrio.com
+            - name: MOA_OIDC_ISSUER
+              value: https://sso.delvrio.com/realms/delvrio-internal
+            - name: MOA_OIDC_CLIENT_ID
+              value: moa-web
+            - name: MOA_OIDC_ENABLED
+              value: '1'
+          startupProbe:
+            httpGet:
+              path: /login
+              port: http
+            periodSeconds: 5
+            failureThreshold: 36
+          readinessProbe:
+            httpGet:
+              path: /login
+              port: http
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /login
+              port: http
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: '2'
+              memory: 1Gi
+          volumeMounts:
+            - name: data
+              mountPath: /data
+            - name: data
+              mountPath: /app/public
+              subPath: public
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: moa-data
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: moa
+  namespace: moa
+spec:
+  selector:
+    app: moa
+  ports:
+    - name: http
+      port: 5001
+      targetPort: http

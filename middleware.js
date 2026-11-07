@@ -64,7 +64,8 @@ const shareScope = async (req) => {
 
 // Paths accessible without login
 const isPublicPath = (p) =>
-  p === '/login' || p === '/api/login' || p.startsWith('/s/') ||
+  p === '/login' || p === '/api/login' || p === '/api/logout' ||
+  ['/api/oidc/login', '/api/oidc/callback', '/api/oidc/config'].includes(p) || p.startsWith('/s/') ||
   p.startsWith('/join/') || p === '/api/signup' || // invite-link signup — the handler validates the token
   p.startsWith('/reset/') || p === '/api/reset-password' || // admin-issued password reset link — same, single-use token
 

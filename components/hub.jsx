@@ -79,7 +79,7 @@ export default function Hub() {
   const clearFilters = () => { setQuery(''); setStatus('all') }
   const logout = async () => {
     setLoggingOut(true)
-    try { const r = await fetch('/api/logout', { method: 'POST' }); if (!r.ok) throw new Error('Could not log out. Please try again.'); location.href = '/login' }
+    try { const r = await fetch('/api/logout', { method: 'POST' }); if (!r.ok) throw new Error('Could not log out. Please try again.'); location.href = (await r.json()).redirect || '/login' }
     catch (e) { setFeedback({ tone: 'danger', text: e.message }); setLoggingOut(false) }
   }
   return <div className={styles.hubShell}>
