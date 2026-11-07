@@ -57,7 +57,7 @@ Claude Code skills ship in [`.agents/skills/`](.agents/skills).
 ## Config
 
 All optional — see [`.env.example`](.env.example). Production: `npm run build && npm start`.
-macOS-first (Claude chat assumes it); the viewer runs anywhere Node 18+ does.
+macOS-first (Claude chat assumes it); the viewer requires Node 20.19+; the container uses Node 24.
 
 ## Design system and verification
 
