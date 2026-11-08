@@ -62,7 +62,7 @@ function ProjectTool({ project, kind, item, onRun, disabled }) {
 function Message({ item }) {
   if (item.kind === 'note') return <div className={styles.note}>{item.text}</div>
   if (item.kind === 'user') return <div className={styles.userMessage}><span className={styles.messageLabel}>You</span><div>{item.text}</div></div>
-  if (item.kind === 'text') return <div className={styles.assistantMessage}><span className={styles.messageLabel}><Icon name="sparkles" size={14} />Claude</span><div>{item.text}</div></div>
+  if (item.kind === 'text') return <div className={styles.assistantMessage}><span className={styles.messageLabel}><Icon name="sparkles" size={14} />AI</span><div>{item.text}</div></div>
   if (item.kind === 'tool') return <details className={`${styles.toolResult} ${item.isError ? styles.error : ''}`}>
     <summary><Icon name="terminal" size={14} /><span><strong>{item.name}</strong><small>{item.label}</small></span><Icon name="chevronDown" size={14} /></summary>
     {item.output != null ? <pre tabIndex={0} aria-label={`${item.name} output`}>{item.output.slice(0, 4000) || 'No output'}</pre> : <p>Waiting for a result.</p>}
@@ -81,6 +81,8 @@ export default function ChatPanel({ project, tools, seed, onClose, compactHeader
   const [restored, setRestored] = useState(false)
   const [input, setInput] = useState('')
   const [busy, setBusy] = useState(false)
+  const [internal, setInternal] = useState(tools?.provider === 'internal')
+  useEffect(() => { fetch('/api/chat/config').then(r => r.json()).then(c => setInternal(c.provider === 'internal')).catch(() => {}) }, [])
   const [dangerous, setDangerous] = useState(false)
   const [sessionId, setSessionId] = useState(null)
   const [showSessions, setShowSessions] = useState(false)
@@ -262,7 +264,7 @@ export default function ChatPanel({ project, tools, seed, onClose, compactHeader
   // stream ownership and session state survive a window resize or rotation.
   const panel = <section className={styles.panel} aria-label="Project AI conversation">
     {!compactHeader && <header className={styles.header}>
-      <div className={styles.heading}><span className={styles.assistantIcon}><Icon name="sparkles" size={18} /></span><div><strong>AI assistant</strong><span>Claude · {project.title}</span></div></div>
+      <div className={styles.heading}><span className={styles.assistantIcon}><Icon name="sparkles" size={18} /></span><div><strong>AI assistant</strong><span>{internal ? '내부 LLM · 문서 질의' : 'Claude'} · {project.title}</span></div></div>
       <IconButton icon="x" label="Close AI assistant" onClick={onClose} />
     </header>}
     <div className={styles.toolbar}>
@@ -287,7 +289,7 @@ export default function ChatPanel({ project, tools, seed, onClose, compactHeader
         </div>
       </div>}
       {items.map((item, index) => <Message key={index} item={item} />)}
-      {busy && <div className={styles.busy} role="status"><span />Claude is working</div>}
+      {busy && <div className={styles.busy} role="status"><span />AI is working</div>}
     </div>}
     {hasTools && <details className={styles.projectTools}>
       <summary><Icon name="sparkles" size={15} />Project tools<span>{(tools.skills?.length || 0) + (tools.agents?.length || 0)}</span><Icon name="chevronDown" size={14} /></summary>
@@ -307,10 +309,10 @@ export default function ChatPanel({ project, tools, seed, onClose, compactHeader
         </div>
       </div>
       <label className={styles.approvalOption}>
-        <input type="checkbox" checked={dangerous} disabled={busy} onChange={(event) => setDangerous(event.target.checked)} />
-        <span>Auto-approve tools</span>{dangerous && <StatusBadge tone="warning">On</StatusBadge>}
+        <input type="checkbox" style={internal ? {display: 'none'} : undefined} checked={dangerous} disabled={busy || internal} onChange={(event) => setDangerous(event.target.checked)} />
+        <span>{internal ? '문서 질의 전용 · 파일 수정 및 명령 실행 없음' : 'Auto-approve tools'}</span>{dangerous && !internal && <StatusBadge tone="warning">On</StatusBadge>}
       </label>
-      {dangerous && <p className={styles.approvalHint}>File edits and commands run without confirmation.</p>}
+      {dangerous && !internal && <p className={styles.approvalHint}>File edits and commands run without confirmation.</p>}
     </form>
   </section>
   return renderPanel ? renderPanel(panel) : panel

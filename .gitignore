@@ -28,3 +28,6 @@ playwright-report/
 oidc.json
 oidc.json.*.tmp
 .private/
+
+llm-sessions.json
+llm-sessions.json.*.tmp

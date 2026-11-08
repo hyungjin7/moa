@@ -15,3 +15,6 @@ artifacts
 test-results
 playwright-report
 *.log
+
+llm-sessions.json
+llm-sessions.json.*.tmp

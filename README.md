@@ -51,7 +51,7 @@ Claude Code skills ship in [`.agents/skills/`](.agents/skills).
 - **Register any folder** — external projects are symlinked in, originals untouched
 - **Share one doc** — tokenized link, recipient sees that doc only
 - **Team accounts** — per-project invites, admin/member roles, single-use password reset links
-- **Claude chat in the browser** — headless `claude` per project, streamed live, resumable sessions
+- **AI chat in the browser** — internal OpenAI-compatible LLM document Q&A with persisted conversations; the original Claude CLI mode remains available when no LLM provider is configured. See [internal LLM operations](docs/2026-11-08_MOA_내부LLM_연결및검증.md).
 - **Locked by default** — password auth, safe on an open port
 
 ## Config

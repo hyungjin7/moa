@@ -1,3 +1,4 @@
+import { llmEnabled, llmProject, llmChat } from '../../../lib/llm.mjs'
 // POST /api/chat — { slug, prompt, sessionId?, dangerous? } (owner only)
 // Runs claude headless from the project root and streams the stream-json events as NDJSON.
 // With a sessionId, continues the conversation via --resume. dangerous=true auto-approves all tools.
@@ -14,8 +15,9 @@ export async function POST(req) {
   if (denied) return denied
   const { slug, prompt, sessionId, dangerous } = await req.json().catch(() => ({}))
   if (!prompt || !String(prompt).trim()) return j({ error: 'The prompt is empty.' }, 400)
-  const proj = readRegistry().projects.find((r) => r.slug === slug)
+  const proj = llmEnabled() ? llmProject(slug) : readRegistry().projects.find((r) => r.slug === slug)
   if (!proj) return j({ error: 'Not a registered project: ' + slug }, 404)
+  if (llmEnabled()) return llmChat(req, proj, prompt, sessionId)
   const root = findClaudeRoot(proj.path) || path.resolve(proj.path)
   if (!inAllow(root)) return j({ error: 'Cannot run outside the allowed folder.' }, 403)
 

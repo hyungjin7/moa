@@ -57,7 +57,7 @@ Client Secret은 채팅·Git·셸 인자에 넣지 않는다. Mac에서 `python3
 - NetworkPolicy: 앱 포트는 Traefik에서만 허용. OIDC는 기존 공개 HTTPS 경로로 통신한다.
 - root 권한 없는 uid/gid 1000, capabilities 제거, 권한 상승 차단. 이미지 digest 고정.
 - MOA_SECRET·MOA_PASSWORD_HASH·MOA_OIDC_CLIENT_SECRET은 `moa/moa-auth`에만 저장한다. 레지스트리 pull credential도 Secret으로 보관한다.
-- Claude Code CLI는 컨테이너에 설치하지 않았다. 문서 열람·자체 로그인·SSO와 별도로 추가 구성할 기능이다.
+- Claude Code CLI는 컨테이너에 설치하지 않았다. 문서 질의는 내부 OpenAI 호환 LLM 프록시로 연결한다. 파일 편집·명령 실행은 별도 기능이다. 자세한 내용은 `2026-11-08_MOA_내부LLM_연결및검증.md`를 참고한다.
 
 ## 검증 및 되돌리기
 

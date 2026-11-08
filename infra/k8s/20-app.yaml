@@ -22,7 +22,7 @@ spec:
         fsGroupChangePolicy: OnRootMismatch
       initContainers:
         - name: initialize-content
-          image: gitea.delvrio.com/hyungjin7/moa/app@sha256:80b5b772fa469edb8e25e83674ba12bbd1ab48bd55c4046e3fd4c2bbba290aa9
+          image: gitea.delvrio.com/hyungjin7/moa/app@sha256:08e053c50bf7022b99e66dc4bf4927958f54464021417989ae27936f90083d86
           command: [node, scripts/initialize-content.mjs]
           securityContext:
             runAsNonRoot: true
@@ -39,7 +39,7 @@ spec:
               value: /data
       containers:
         - name: app
-          image: gitea.delvrio.com/hyungjin7/moa/app@sha256:80b5b772fa469edb8e25e83674ba12bbd1ab48bd55c4046e3fd4c2bbba290aa9
+          image: gitea.delvrio.com/hyungjin7/moa/app@sha256:08e053c50bf7022b99e66dc4bf4927958f54464021417989ae27936f90083d86
           ports:
             - name: http
               containerPort: 5001
@@ -54,6 +54,12 @@ spec:
             - secretRef:
                 name: moa-auth
           env:
+            - name: LLM_PROVIDER
+              value: custom
+            - name: OPENAI_BASE_URL
+              value: http://agent-service.bbb-namespace.svc.cluster.local:8000/api/v1
+            - name: MOA_LLM_PROXY
+              value: '1'
             - name: MOA_CONTENT_ROOT
               value: /data
             - name: MOA_BROWSE_ROOT

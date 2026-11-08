@@ -15,6 +15,7 @@ jobs:
           node-version: '24'
           cache: npm
       - run: npm ci --no-audit --no-fund
+      - run: node --test tests/llm.test.mjs
       - run: npm run test:oidc
       - run: npm run build
         env:
