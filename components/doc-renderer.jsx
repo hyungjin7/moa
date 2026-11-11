@@ -95,3 +95,14 @@ export default function DocRenderer({ slug, doc, version = 0 }) {
   const Doc = result.Component
   return <DocumentBoundary key={`${key}:${attempt}`} resetKey={Doc} onRetry={retry}><MDXProvider components={documentComponents}><Doc /></MDXProvider></DocumentBoundary>
 }
+
+// Editor-only unsaved preview; it never changes the reader's document cache.
+export function DocumentPreview({ code }) {
+  const result = ReactNS.useMemo(() => {
+    try { const m = evalBundle(code); return m.default ? { Component: m.default } : { error: '미리보기 문서가 없습니다.' } }
+    catch (e) { return { error: String(e.message || e) } }
+  }, [code])
+  if (result.error) return <InlineAlert tone="danger" title="미리보기 오류">{result.error}</InlineAlert>
+  const Doc = result.Component
+  return <DocumentBoundary resetKey={code}><MDXProvider components={documentComponents}><Doc /></MDXProvider></DocumentBoundary>
+}

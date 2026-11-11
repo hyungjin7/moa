@@ -31,3 +31,5 @@ oidc.json.*.tmp
 
 llm-sessions.json
 llm-sessions.json.*.tmp
+
+.document-history/

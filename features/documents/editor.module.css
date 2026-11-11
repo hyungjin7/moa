@@ -1,0 +1,15 @@
+.dialog.dialog { width: min(1380px, calc(100vw - 32px)); max-width: none; max-height: calc(100dvh - 32px); }
+.toolbar { display: flex; align-items: center; flex-wrap: wrap; gap: 4px; margin: 8px 0 14px; }
+.toolbar small { color: var(--color-text-muted); margin-left: auto; font-size: 12px; }
+.workspace { display: grid; min-width: 0; min-height: min(55dvh, 560px); }
+.split { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 18px; }
+.sourcePanel, .previewPanel, .historyPanel { min-width: 0; display: flex; flex-direction: column; gap: 10px; }
+.sourcePanel > span, .previewPanel > strong { font-size: 13px; font-weight: 600; }
+.workspace textarea { width: 100%; min-height: 360px; flex: 1; resize: vertical; padding: 14px; border: 1px solid var(--color-border-subtle); border-radius: 10px; background: var(--color-surface-panel); color: inherit; font: 13px/1.65 ui-monospace, SFMono-Regular, Menlo, monospace; tab-size: 2; }
+.workspace textarea:focus { outline: 2px solid var(--color-accent, #7558db); outline-offset: 2px; }
+.previewPanel article { max-height: 60dvh; min-height: 360px; overflow: auto; padding: 14px; border: 1px solid var(--color-border-subtle); border-radius: 10px; overflow-wrap: anywhere; }
+.historyPanel label { display: flex; flex-direction: column; gap: 8px; font-size: 13px; }
+.historyPanel select { width: 100%; max-width: 100%; min-width: 0; padding: 10px; border: 1px solid var(--color-border-subtle); border-radius: 8px; color: inherit; background: var(--color-surface-panel); }
+.historyPanel > button { align-self: flex-start; }
+.saveState { margin-right: auto; color: var(--color-text-muted); font-size: 12px; }
+@media (max-width: 760px) { .dialog.dialog { width: calc(100vw - 16px); max-height: calc(100dvh - 16px); } .split { grid-template-columns: minmax(0, 1fr); } .toolbar small { width: 100%; margin: 7px 0 0; } .workspace textarea { min-height: 300px; } .previewPanel article { max-height: none; min-height: 180px; } }

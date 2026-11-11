@@ -9,6 +9,7 @@ import GlobalSearch, { SearchButton, useSearchShortcut } from '../search/GlobalS
 import DocumentNavigation, { sortOptions } from './DocumentNavigation.jsx'
 import DocumentOutline from './DocumentOutline.jsx'
 import ViewMenu from './ViewMenu.jsx'
+import DocumentEditor from './DocumentEditor.jsx'
 import { ShareButton } from './DocumentActions.jsx'
 import { useReaderView } from './use-reader-view.js'
 import styles from './reader.module.css'
@@ -46,6 +47,7 @@ export default function ReaderLayout({ slug, docSlug }) {
   const project = index?.projects?.find((entry) => entry.slug === slug)
   const doc = project && (docSlug ? project.docs.find((entry) => entry.slug === docSlug) : project.docs[0])
   const cinfo = owner ? claude[slug] : null
+  const [editorOpen, setEditorOpen] = useState(false)
   const [chat, setChat] = useState(null)
   const [chatOpen, setChatOpen] = useState(false)
   const [navigationOpen, setNavigationOpen] = useState(false)
@@ -153,6 +155,7 @@ export default function ReaderLayout({ slug, docSlug }) {
         </div>
         <div className={styles.headerActions}>
           {!authed && <StatusBadge tone="neutral">Shared document</StatusBadge>}
+          {owner && doc && !project.demo && <Button size="sm" variant="ghost" onClick={() => setEditorOpen(true)}><Icon name="edit" size={16} />편집</Button>}
           {owner && doc && <ShareButton slug={slug} doc={doc.slug} />}
           {cinfo && <Button ref={chatTriggerRef} variant={chatVisible ? 'secondary' : 'ghost'} size="sm" aria-expanded={chatVisible} aria-label={chatVisible ? 'Close AI assistant' : 'Open AI assistant'}
             onClick={() => { setChat((current) => current || { seed: null }); setChatOpen((current) => !current) }}>
@@ -190,6 +193,7 @@ export default function ReaderLayout({ slug, docSlug }) {
     {authed && <Drawer open={navigationOpen} onClose={() => setNavigationOpen(false)} title="Document navigation" side="left" className={styles.navigationDrawer}>
       <DocumentNavigation {...navigationProps} mobile onNavigate={() => setNavigationOpen(false)} />
     </Drawer>}
+    {owner && doc && !project.demo && <DocumentEditor key={`${slug}/${doc.slug}`} open={editorOpen} onClose={() => setEditorOpen(false)} onSaved={() => { reload(); setDocVersion(v => v + 1) }} slug={slug} doc={doc.slug} title={doc.title} />}
     {authed && <GlobalSearch open={searchOpen} onClose={() => setSearchOpen(false)} index={index} currentSlug={slug} />}
     {chatEnabled && <ChatPanel key={slug} project={project} tools={cinfo} seed={chat.seed} onClose={closeChat} compactHeader={!wideChat} visible={chatVisible}
       renderPanel={(content) => wideChat ? <div className={styles.chatColumn} hidden={!chatVisible}>{content}</div>
