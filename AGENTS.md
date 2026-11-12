@@ -32,6 +32,8 @@ npm run add-user -- <email> <name> <pw> admin   # add an account directly (users
   updates. `admin` sees everything. Admin-only APIs
   (`/api/chat`·`trigger`·`add`·`remove`·`browse`·`order*`·`hide`·`projects/update`·`doc/update`·`share*`·`session*`·`users*`·`claude`)
   are double-guarded: middleware path blocking + route guards (`guardAdmin` in `lib/api.mjs`).
+  Document lifecycle actions at `/api/doc/manage` also require an active administrator in
+  middleware and the handler, with Origin/JSON checks on writes. See the runbook below.
   `/api/projects`·`/api/doc`·`/api/watch` filter by the member's `projects`.
   (Note: `public/` media is reachable by any logged-in member who guesses the path.)
 - **Invites**: a project sidebar's "👥 Invite" (that project only) or hub ⚙ settings →
@@ -268,6 +270,16 @@ has loaded, into room a script in the page's head made before the first paint (`
 page sticks under the strip with `top: var(--moa-tabs-h)` (0 without the strip).
 
 ## Agent contract (publishing reports)
+
+Document move/delete/restore: admins use the reader's **이동 / 삭제 / 휴지통** buttons.
+The home page also has **휴지통**, so deleting a project's last page remains recoverable.
+`GET /api/doc/manage` lists trash; `POST` takes `{action:'move',slug,doc,targetSlug,expectedRevision}`,
+`{action:'trash',slug,doc,expectedRevision}`, or `{action:'restore',id}`. A move preserves the document
+file name, source and prior versions. Same-name collisions are rejected. Existing share links are
+revoked on project move/delete and are never revived by restore. Trash is private under
+`MOA_CONTENT_ROOT/.document-trash`; include it and `.document-history` in backups, never images/Git.
+No permanent-delete API is provided. Group-only moves retain `/api/doc/update` and its version history.
+Runbook: `docs/2026-11-12_MOA_문서이동_휴지통_운영.md`.
 
 1. **New project**: create `projects/<slug>/` + `_meta.json` (or use the register API):
    ```json

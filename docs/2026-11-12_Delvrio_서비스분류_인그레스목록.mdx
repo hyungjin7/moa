@@ -1,0 +1,111 @@
+export const title = 'Delvrio 서비스 분류·인그레스 목록'
+export const group = '아키텍처'
+export const date = '2026-11-12'
+export const order = 5
+
+# Delvrio 서비스 분류·인그레스 목록
+
+2026-11-12 KST 운영 설정을 직접 확인한 목록입니다. 우리가 직접 개발하는 서비스, 외부 소스를 수정한 서비스, 설치해서 사용하는 제품을 구분했습니다.
+
+현재 **도메인 25개(와일드카드 포함), 인그레스 41개**입니다. 도메인이 여러 개여도 같은 앱을 가리킬 수 있으므로 도메인 수와 앱 수는 다릅니다. 앞서 작성한 엑셀에는 OpenClaw가 포함됐지만, 이 문서는 삭제 후 상태를 반영했습니다.
+
+## 서비스 분류
+
+기성제품도 공개 원소스가 있지만, 우리가 제품 자체를 개발한 것과는 구분합니다. 로그인·테마·대시보드·설정 수정은 별도로 표시했습니다.
+
+| 서비스 | 도메인 | 개발·운영 구분 | 우리의 관리·수정 범위 | 소스·설정 위치 | 확인 내용 |
+| --- | --- | --- | --- | --- | --- |
+| BBB | bbb.delvrio.com | 자체 개발 | 프런트엔드·API·배치·로그인 | https://github.com/hyungjin7/bbb (services, infra) | 로컬 소스·운영 인그레스 확인 |
+| CCC | ccc.delvrio.com | 자체 개발 | 전용 프런트엔드·공유 API | https://github.com/hyungjin7/bbb (services, infra) | 전용 이미지 ccc-frontend 확인. 해당 소스 위치는 별도 확인 |
+| Delvrio Dashboard | dashboard.delvrio.com | 자체 개발 | 대시보드 화면·관제 API | https://github.com/hyungjin7/bbb (services, infra) | BBB 프런트엔드·dcore API 공유 확인 |
+| i3 | i3.delvrio.com | 자체 개발 | i3 화면·BBB 공통 API | https://github.com/hyungjin7/iii / 공통 API: bbb | 로컬 소스·전용 화면 및 공통 API 경로 확인 |
+| TNC CRM | crm.delvrio.com | 자체 개발 | CRM 화면·API·BBB 로그인 연동 | hyungjin7/tnc-crm (운영 이미지 저장소) / 인증: bbb | 전용 api/web 이미지와 bbb 설정 주석 확인. CRM 소스 본문 미열람 |
+| SLP | slp.delvrio.com | 자체 개발 | 물류 화면·API·인증 연동 | https://github.com/hyungjin7/slp | 로컬 소스·slp-api·slp-frontend 확인 |
+| Green Logistics | gl.delvrio.com | 자체 개발 | SLP와 같은 프런트엔드·API | https://github.com/hyungjin7/slp | slp와 동일 서비스로 전달. 별도 앱으로 중복 계산하지 않음 |
+| Delvrio 홈페이지 | www.delvrio.com | 자체 개발 | 웹 화면·가입 API·승인 | https://github.com/hyungjin7/bbb (services, infra) / services/www, services/dcore | 두 namespace에서 같은 도메인 설정 확인. 우선순위 점검 대상 |
+| 홈페이지 대표 주소 | delvrio.com | 자체 개발 | www와 같은 웹 서비스 | https://github.com/hyungjin7/bbb (services, infra) | www와 같은 인그레스 규칙에서 제공 |
+| 미등록 주소 안내 | *.delvrio.com | 자체 개발 | 와일드카드 안내 화면·라우팅 | https://github.com/hyungjin7/bbb (services, infra) | 독립 제품이 아님. bbb-namespace/www에 설정 공존 |
+| MOA | moa.delvrio.com | 외부 소스 수정 | Keycloak·내부 LLM·편집·이전 버전 복원 | https://github.com/hyungjin7/moa / 원소스: https://github.com/ruucm/moa | 로컬 README의 원소스와 추가 개발 기능 확인 |
+| 사내 로그인 | login.delvrio.com | 기성제품 + 자체 연동 | Keycloak 설정·테마 및 BBB 로그인 화면 | https://github.com/hyungjin7/iam / 로그인 중계: bbb | Keycloak 원제품 + 자체 화면/중계 경로 확인 |
+| Keycloak | sso.delvrio.com | 기성제품 + 자체 연동 | Realm·OIDC·테마·사용자 승인 연동 | https://github.com/hyungjin7/iam / 승인 API: bbb | 공식 Keycloak 이미지 확인. 제품 엔진 자체 개발 아님 |
+| Argo CD | argocd.delvrio.com | 기성제품 운영 | 설치·배포 설정 | bbb / infra/3rd-party/argocd | 같은 namespace·호스트·경로·백엔드 인그레스 2개. 중복 후보 |
+| Prometheus | prometheus.delvrio.com | 기성제품 운영 | 수집 설정·알림 규칙·BBB 인증 중계 | bbb / infra/3rd-party/grafana, argocd | 공식 Prometheus 이미지 확인. /admin은 BBB 별도 경로 |
+| Grafana | grafana.delvrio.com | 기성제품 운영 | 대시보드·데이터소스·SSO 설정 | bbb / infra/3rd-party/grafana | 공식 Grafana 이미지 확인. 대시보드 설정과 제품 코드는 구분 |
+| Gitea | gitea.delvrio.com | 기성제품 운영 | 설치·Runner·파이프라인 설정 | bbb / infra/gitea | gitea/gitea 공식 제품 이미지 확인 |
+| Rocket.Chat | chat.delvrio.com | 기성제품 운영 | 설치·Keycloak·역할/채널 설정 | https://github.com/hyungjin7/iam / deploy | 공식 Rocket.Chat 이미지. /health는 상태 확인 경로 |
+| n8n | n8n.delvrio.com | 기성제품 운영 | 워크플로·연결·설치 설정 | 설치 저장소 위치 미확인 | n8nio/n8n 이미지 확인. 제품 코드 수정 여부는 미조사 |
+| Flower | flower.delvrio.com | 기성제품 운영 | 배포·인증·연결 설정 | bbb / infra (배포 설정) | mher/flower 이미지 확인. 자체 운영관제 화면과 다른 제품 |
+| Open WebUI | ai.delvrio.com | 기성제품 운영 | 모델 연결·계정·설치 설정 | 설치 저장소 위치 미확인 | ghcr.io/open-webui/open-webui 이미지 확인 |
+| oMLX | omlx.delvrio.com | 기성제품 운영 | LLM 서버 운영·BBB 로그인 중계 | 외부 서버 192.168.219.48 / 인증: bbb | K3s 앱 Pod가 아니라 외부 서비스로 전달. 원소스 수정 여부 미조사 |
+| Odysseus | odysseus.delvrio.com | 분류 확인 필요 | 전용 앱 운영·BBB 인증 중계 | 운영 이미지: hyungjin7/odysseus/app | 전용 이미지 확인. 원소스·자체 개발 범위는 코드 확인 필요 |
+| MCP Gateway | mcp.delvrio.com | 분류 확인 필요 | 게이트웨이 배포·설정 | bbb / infra/3rd-party/mcp-gateway-on-k3s | 운영 이미지는 node:20-alpine. 실제 프로그램 원소스·기능은 추가 확인 필요 |
+| Suntax | suntax.delvrio.com | 분류 확인 필요 | Traefik 전달 설정 | 별도 서버 116.43.234.73:80 | K3s 내부 Suntax 앱 아님. 대상 앱 소스 보유·수정 범위 미확인 |
+
+## 인그레스 전체 목록
+
+namespace는 설정이 들어 있는 서랍이라고 생각하면 됩니다. 로그인 설정은 bbb-namespace에, 실제 제품은 다른 namespace에 있을 수도 있습니다.
+
+| namespace | Ingress 이름 | 도메인 | Class | 연결 Service | 경로 수 |
+| --- | --- | --- | --- | --- | --- |
+| argocd | argocd-server | argocd.delvrio.com | traefik | argocd-server | 1 |
+| argocd | argocd-server-ingress | argocd.delvrio.com | traefik | argocd-server | 1 |
+| bbb-namespace | bbb-ingress | bbb.delvrio.com | traefik | agent-service, core-service, csap-service, frontend-service, kiwoom-service, market-service, news-service, report, stock-service, youtube-service | 30 |
+| bbb-namespace | ccc-api-ingress | ccc.delvrio.com | traefik | agent-service, ccc-frontend-service, core-service, csap-service, kiwoom-service, market-service, news-service, report, stock-service, youtube-service | 31 |
+| bbb-namespace | crm-auth-ingress | crm.delvrio.com | traefik | core-service | 2 |
+| bbb-namespace | dashboard-ingress | dashboard.delvrio.com | traefik | agent-service, core-service, frontend-service | 6 |
+| bbb-namespace | dashboard-login-ingress | dashboard.delvrio.com | traefik | core-service | 3 |
+| bbb-namespace | flower-ingress | flower.delvrio.com | traefik | flower-service | 1 |
+| bbb-namespace | i3-api-ingress | i3.delvrio.com | traefik | agent-service, core-service, csap-service, kiwoom-service, market-service, news-service, report, stock-service, youtube-service | 29 |
+| bbb-namespace | login-ingress | login.delvrio.com, sso.delvrio.com | traefik | core-service | 2 |
+| bbb-namespace | odysseus-auth-ingress | odysseus.delvrio.com | traefik | core-service | 1 |
+| bbb-namespace | omlx-auth-ingress | omlx.delvrio.com | traefik | core-service | 1 |
+| bbb-namespace | omlx-ingress | omlx.delvrio.com | traefik | omlx-external | 1 |
+| bbb-namespace | prometheus-auth-ingress | prometheus.delvrio.com | traefik | core-service | 1 |
+| bbb-namespace | slp-auth-ingress | slp.delvrio.com | traefik | core-service | 2 |
+| bbb-namespace | suntax-ingress | suntax.delvrio.com | traefik | suntax-external | 1 |
+| bbb-namespace | www-api-ingress | www.delvrio.com | traefik | core-service | 1 |
+| bbb-namespace | www-fallback-ingress | *.delvrio.com | traefik | www-service | 1 |
+| bbb-namespace | www-ingress | www.delvrio.com, delvrio.com | traefik | core-service, www-service | 4 |
+| bbb-namespace | www-workspace-ingress | www.delvrio.com | traefik | www-service | 2 |
+| crm | crm-ingress | crm.delvrio.com | traefik | crm-api, crm-web | 2 |
+| gitea | gitea | gitea.delvrio.com | traefik | gitea-http | 1 |
+| iam | keycloak-admin-lan | sso.delvrio.com | traefik | keycloak | 2 |
+| iam | keycloak-customers-public | sso.delvrio.com | traefik | keycloak | 1 |
+| iam | keycloak-login | login.delvrio.com | traefik | keycloak | 2 |
+| iam | keycloak-public | sso.delvrio.com | traefik | keycloak | 2 |
+| iii | iii-ingress | i3.delvrio.com | traefik | iii-frontend | 1 |
+| mcp-system | mcp-gateway | mcp.delvrio.com | nginx | mcp-gateway | 1 |
+| moa | moa | moa.delvrio.com | traefik | moa | 1 |
+| monitoring | grafana-ingress | grafana.delvrio.com | traefik | kube-prometheus-grafana | 1 |
+| monitoring | prometheus-ingress | prometheus.delvrio.com | traefik | kube-prometheus-kube-prome-prometheus | 1 |
+| n8n | n8n | n8n.delvrio.com | traefik | n8n | 1 |
+| odysseus | odysseus-ingress | odysseus.delvrio.com | traefik | odysseus | 1 |
+| open-webui | open-webui-ingress | ai.delvrio.com | &lt;none&gt; | open-webui-service | 1 |
+| rocketchat | rocketchat | chat.delvrio.com | traefik | rocketchat-rocketchat | 1 |
+| rocketchat | rocketchat-readiness | chat.delvrio.com | traefik | rocketchat-rocketchat | 1 |
+| slp | gl-ingress | gl.delvrio.com | traefik | slp-api, slp-frontend | 2 |
+| slp | slp-ingress | slp.delvrio.com | traefik | slp-api, slp-frontend | 2 |
+| www | www-fallback-ingress | *.delvrio.com | traefik | www-service | 1 |
+| www | www-ingress | www.delvrio.com, delvrio.com | traefik | www-service | 2 |
+| www | www-workspace-ingress | www.delvrio.com | traefik | www-service | 2 |
+
+## 따로 기억할 사항
+
+- **MOA**: `moa` namespace의 `moa` 인그레스가 `moa:5001`로 전달합니다. 원소스는 `ruucm/moa`, 우리가 수정하는 저장소는 `hyungjin7/moa`입니다.
+- **Suntax**: K3s 안에서 Suntax 앱을 실행하는 것이 아닙니다. `bbb-namespace/suntax-ingress`가 별도 서버 `116.43.234.73:80`으로 넘겨줍니다.
+- **oMLX**: `192.168.219.48`의 LLM 서버로 전달하고 로그인은 BBB 경로를 사용합니다.
+- **Argo CD**: 같은 namespace·도메인·기본 경로·서비스를 가리키는 인그레스가 두 개 있습니다. 중복 후보이며 이번 목록 작성에서는 변경하지 않았습니다.
+- **홈페이지**: `www`와 `bbb-namespace`에 같은 호스트 설정이 공존합니다. 단순히 이름이 비슷하다는 이유만으로 삭제하면 안 됩니다.
+- **MCP Gateway**: 인그레스 Class는 nginx이고 ADDRESS가 비어 있습니다. 실제 연결 정상 여부와 프로그램 원소스는 추가 확인이 필요합니다.
+- 이 목록은 인그레스가 있는 서비스만 다룹니다. DB·스토리지·내부 전용 서비스까지 모두 나열한 자산 목록은 아닙니다. 인그레스 설정 존재는 접속 정상 검증과 다릅니다.
+
+## OpenClaw 삭제 완료
+
+2026-11-12 사용자 요청으로 `bbb-node-01`의 OpenClaw 프로그램, 사용자 서비스, 대화·워크스페이스·설정·백업 파일·SQLite·캐시를 삭제했습니다. 전용 인그레스·서비스·엔드포인트·TLS 인증서와 홈페이지 링크도 제거했습니다. 18789 포트 종료와 전용 데이터 경로 부재를 확인했습니다. Hermes 공유 실행기는 보존했습니다.
+
+## 확인 근거
+
+- 사용자 제공 `kubectl get ingress -A` 목록과 운영 클러스터의 Ingress / Service / EndpointSlice / Deployment / StatefulSet 설정.
+- 로컬 BBB·i3·SLP·IAM·MOA 저장소의 Git remote, 배포 매니페스트와 README.
+- 원소스·수정 범위를 확인하지 못한 Odysseus·MCP Gateway·Suntax는 확인 필요로 표시했습니다.
+- [OpenClaw 삭제 결과](https://github.com/hyungjin7/bbb/blob/main/docs/ops/2026-11-12_OpenClaw_삭제결과.md).

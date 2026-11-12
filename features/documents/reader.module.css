@@ -100,13 +100,13 @@
 .navigationFooter a, .navigationFooter > span { display: flex; align-items: center; gap: var(--space-3); min-height: 44px; color: var(--color-text-muted); font-size: var(--font-size-xs); text-decoration: none; }
 .navigationFooter a:hover { color: var(--color-accent-text); }
 .readingArea { min-width: 0; }
-.readerHeader { display: flex; align-items: center; justify-content: space-between; gap: var(--space-5); height: 80px; padding: 0 var(--space-10); border-bottom: 1px solid var(--color-border-subtle); background: var(--color-surface-panel); }
+.readerHeader { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--space-5); min-height: 80px; padding: 12px var(--space-10); border-bottom: 1px solid var(--color-border-subtle); background: var(--color-surface-panel); }
 .headerContext { display: flex; align-items: center; gap: var(--space-4); min-width: 0; }
 .breadcrumb { display: flex; align-items: center; min-width: 0; gap: var(--space-3); color: var(--color-text-muted); font-size: var(--font-size-xs); }
 .breadcrumb > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .breadcrumb > span:first-child { max-width: 14rem; flex-shrink: 2; }
 .breadcrumbCurrent { color: var(--color-text-secondary); }
-.headerActions { display: flex; align-items: center; gap: var(--space-2); flex-shrink: 0; }
+.headerActions { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-2); max-width: 100%; }
 .mobileMenu { display: none; }
 /* Shown while the sidebar is collapsed: the way back, plus the brand the sidebar used to carry. */
 .sidebarExpand { display: flex; align-items: center; gap: var(--space-3); margin-left: calc(-1 * var(--space-3)); }
@@ -222,13 +222,13 @@
   .shell { display: block; }
   .sidebar { display: none; }
   .sidebarExpand { display: none; }
-  .readerHeader { height: 68px; gap: var(--space-2); padding: 0 var(--space-4); }
+  .readerHeader { min-height: 68px; flex-direction: column; align-items: stretch; gap: var(--space-2); padding: 8px var(--space-4); }
   .headerContext { gap: var(--space-2); }
   .mobileMenu { display: flex; align-items: center; margin-left: calc(-1 * var(--space-2)); }
   .breadcrumb { font-size: var(--font-size-sm); }
   .breadcrumb > span:first-child { max-width: none; flex-shrink: 1; color: var(--color-text-secondary); }
   .breadcrumb > svg, .breadcrumbCurrent { display: none; }
-  .headerActions { gap: 0; }
+  .headerActions { gap: 0; justify-content: flex-end; }
   .aiLabel { display: none; }
   .documentLayout { display: block; padding: var(--space-8) var(--space-5) var(--space-5); }
   /* A page's own component wider than the screen (a line that may not wrap, a fixed-width figure) is cut at the

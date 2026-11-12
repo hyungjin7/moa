@@ -52,6 +52,7 @@ Claude Code skills ship in [`.agents/skills/`](.agents/skills).
 - **Share one doc** — tokenized link, recipient sees that doc only
 - **Team accounts** — per-project invites, admin/member roles, single-use password reset links
 - **Markdown/MDX editor** — admin editing, live preview, conflict-safe saves and the latest 50 versions with restore. [Usage and operations](docs/2026-11-11_MOA_문서편집_설계및운영.md).
+- **Document management** — move a page to another group or project, delete it into a private trash bin, and restore its source and version history. Admin-only, with collision checks and old share-link revocation. [Usage and operations](docs/2026-11-12_MOA_문서이동_휴지통_운영.md).
 - **AI chat in the browser** — internal OpenAI-compatible LLM document Q&A with persisted conversations; the original Claude CLI mode remains available when no LLM provider is configured. See [internal LLM operations](docs/2026-11-08_MOA_내부LLM_연결및검증.md).
 - **Locked by default** — password auth, safe on an open port
 

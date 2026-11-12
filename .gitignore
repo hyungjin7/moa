@@ -33,3 +33,4 @@ llm-sessions.json
 llm-sessions.json.*.tmp
 
 .document-history/
+.document-trash/

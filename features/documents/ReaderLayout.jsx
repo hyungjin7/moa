@@ -10,6 +10,7 @@ import DocumentNavigation, { sortOptions } from './DocumentNavigation.jsx'
 import DocumentOutline from './DocumentOutline.jsx'
 import ViewMenu from './ViewMenu.jsx'
 import DocumentEditor from './DocumentEditor.jsx'
+import DocumentManager from './DocumentManager.jsx'
 import { ShareButton } from './DocumentActions.jsx'
 import { useReaderView } from './use-reader-view.js'
 import styles from './reader.module.css'
@@ -156,6 +157,7 @@ export default function ReaderLayout({ slug, docSlug }) {
         <div className={styles.headerActions}>
           {!authed && <StatusBadge tone="neutral">Shared document</StatusBadge>}
           {owner && doc && !project.demo && <Button size="sm" variant="ghost" onClick={() => setEditorOpen(true)}><Icon name="edit" size={16} />편집</Button>}
+          {owner && doc && !project.demo && <DocumentManager slug={slug} doc={doc} projects={index.projects} onChanged={() => { reload(); setDocVersion(v => v + 1) }} />}
           {owner && doc && <ShareButton slug={slug} doc={doc.slug} />}
           {cinfo && <Button ref={chatTriggerRef} variant={chatVisible ? 'secondary' : 'ghost'} size="sm" aria-expanded={chatVisible} aria-label={chatVisible ? 'Close AI assistant' : 'Open AI assistant'}
             onClick={() => { setChat((current) => current || { seed: null }); setChatOpen((current) => !current) }}>

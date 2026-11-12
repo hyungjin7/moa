@@ -22,7 +22,7 @@ spec:
         fsGroupChangePolicy: OnRootMismatch
       initContainers:
         - name: initialize-content
-          image: gitea.delvrio.com/hyungjin7/moa/app@sha256:76dbeecec361e25c2add2ee08277fc2504ed14551a350013af35e291459a3ae2
+          image: gitea.delvrio.com/hyungjin7/moa/app@sha256:11b22e33c7f5f9f9825dfa00f8a61faa4ef6a802d3acf43df41232c21d62d61d
           command: [node, scripts/initialize-content.mjs]
           securityContext:
             runAsNonRoot: true
@@ -39,7 +39,7 @@ spec:
               value: /data
       containers:
         - name: app
-          image: gitea.delvrio.com/hyungjin7/moa/app@sha256:76dbeecec361e25c2add2ee08277fc2504ed14551a350013af35e291459a3ae2
+          image: gitea.delvrio.com/hyungjin7/moa/app@sha256:11b22e33c7f5f9f9825dfa00f8a61faa4ef6a802d3acf43df41232c21d62d61d
           ports:
             - name: http
               containerPort: 5001

@@ -9,6 +9,7 @@ import useProjectOrder from '../features/hub/use-project-order.js'
 import SettingsPanel from '../features/settings/settings-panel.jsx'
 import AddProjectModal from '../features/settings/add-project-modal.jsx'
 import GlobalSearch, { SearchButton, useSearchShortcut } from '../features/search/GlobalSearch.jsx'
+import DocumentManager from '../features/documents/DocumentManager.jsx'
 import styles from '../features/hub/hub.module.css'
 
 export default function Hub() {
@@ -89,6 +90,7 @@ export default function Hub() {
         <HubIdentity />
         <nav className={styles.topbarActions} aria-label="Workspace management">
           {authed && <SearchButton onClick={() => setShowSearch(true)} />}
+          {owner && <DocumentManager trashOnly onChanged={reload} />}
           {owner && <Button className={styles.addButton} onClick={() => setShowAdd(true)}><Icon name="plus" size={17} />New project</Button>}
           {authed && <div className={styles.workspaceMenuWrap}>
             <IconButton ref={workspaceTriggerRef} icon="more" label="Workspace menu" aria-expanded={showWorkspaceMenu} onClick={() => setShowWorkspaceMenu(value => !value)} />
